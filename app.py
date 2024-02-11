@@ -72,7 +72,6 @@ def extract_highlighted_text():
     extracted_text = highlighted_text.replace('<highlight>', '').replace('</highlight>', '')
     
     return extracted_text
-# Function to classify highlighted input for both binary and multi-class
 def classify_highlighted_input(highlighted_input):
     try:
         # Extract the text from highlighted input
@@ -92,7 +91,9 @@ def classify_highlighted_input(highlighted_input):
         }
     except Exception as e:
         st.error(f"Error in classify_highlighted_input: {e}")
+        print(f"Error in classify_highlighted_input: {e}")
         return None
+
 # Streamlit App
 def main():
     st.title("Cyberbullying Detection App")
