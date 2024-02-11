@@ -93,7 +93,6 @@ def classify_highlighted_input(highlighted_input):
         st.error(f"Error in classify_highlighted_input: {e}")
         print(f"Error in classify_highlighted_input: {e}")
         return None
-
 # Streamlit App
 def main():
     st.title("Cyberbullying Detection App")
@@ -106,13 +105,16 @@ def main():
         # Classify highlighted input
         classification_results = classify_highlighted_input(highlighted_input)
 
-        # Display results
-        st.subheader("Results:")
-        st.write("User Input:", classification_results["user_input"])
-        st.write("Binary Prediction:", classification_results["binary_prediction"])
-        st.write("Offending Words:", classification_results["offending_words"])
-        st.write("Multi-class Label:", classification_results["multi_class_label"])
-        st.write("Decision Function Values:", classification_results["decision_function_values"])
+        if classification_results is not None:
+            # Display results
+            st.subheader("Results:")
+            st.write("User Input:", classification_results["user_input"])
+            st.write("Binary Prediction:", classification_results["binary_prediction"])
+            st.write("Offending Words:", classification_results["offending_words"])
+            st.write("Multi-class Label:", classification_results["multi_class_label"])
+            st.write("Decision Function Values:", classification_results["decision_function_values"])
+        else:
+            st.error("Error in classification. Please try again.")
 
 # Run the Streamlit app
 if __name__ == "__main__":
