@@ -72,6 +72,7 @@ def extract_highlighted_text():
     extracted_text = highlighted_text.replace('<highlight>', '').replace('</highlight>', '')
     
     return extracted_text
+
 def classify_highlighted_input(highlighted_input):
     try:
         # Extract the text from highlighted input
