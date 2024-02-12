@@ -11,7 +11,7 @@ sgd_classifier = joblib.load('sgd_classifier_model.joblib')
 label_encoder = joblib.load('label_encoder.joblib')
 
 # Load the logo image
-logo = Image.open('logo.png')
+logo = Image.open('icon.png')
 
 # Global variables
 session_state = {
