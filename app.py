@@ -73,7 +73,7 @@ def extract_highlighted_text():
     
     return extracted_text
 
-def classify_highlighted_input(highlighted_input):
+def classify_highlighted_input():
     try:
         # Extract the text from highlighted input
         user_input = extract_highlighted_text()
@@ -94,6 +94,7 @@ def classify_highlighted_input(highlighted_input):
         st.error(f"Error in classify_highlighted_input: {e}")
         print(f"Error in classify_highlighted_input: {e}")
         return None
+
 
 # Streamlit App
 def main():
