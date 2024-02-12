@@ -64,6 +64,26 @@ def multi_class_cyberbullying_detection(text):
 # Function to create highlighted text
 def highlight_text(text):
     return f'<span style="background-color: yellow;">{text}</span>'
+# Function to extract text from highlighted input
+def extract_highlighted_text(highlighted_text):
+    try:
+        # Hypothetical function to extract the text from highlighted input
+        # You may need to replace this with your actual implementation
+        # This is just a placeholder, adapt it to your needs
+        start_tag = "<highlight>"
+        end_tag = "</highlight>"
+        start_index = highlighted_text.find(start_tag)
+        end_index = highlighted_text.find(end_tag)
+
+        if start_index != -1 and end_index != -1:
+            extracted_text = highlighted_text[start_index + len(start_tag):end_index]
+            return extracted_text
+        else:
+            st.warning("No highlighted text found.")
+            return None
+    except Exception as e:
+        st.error(f"Error in extract_highlighted_text: {e}")
+        return None
 
 # Function to classify highlighted input for both binary and multi-class
 def classify_highlighted_input(highlighted_input):
