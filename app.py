@@ -8,6 +8,7 @@ from nltk.stem import WordNetLemmatizer
 import numpy as np
 import joblib
 import streamlit as st
+model_pipeline = joblib.load('sgd_classifier_model.joblib')
 
 # Load the SGD classifier, TF-IDF vectorizer, and label encoder
 sgd_classifier = joblib.load('sgd_classifier_model.joblib')
