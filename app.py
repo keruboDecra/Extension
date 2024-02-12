@@ -61,13 +61,9 @@ def multi_class_cyberbullying_detection(text):
         st.error(f"Error in multi_class_cyberbullying_detection: {e}")
         return None
 
-# Function to extract text from highlighted input
-def extract_highlighted_text(highlighted_text):
-    # Hypothetical function to extract the text from highlighted input
-    # You may need to replace this with your actual implementation
-    # This is just a placeholder, adapt it to your needs
-    extracted_text = highlighted_text.replace('<highlight>', '').replace('</highlight>', '')
-    return extracted_text
+# Function to create highlighted text
+def highlight_text(text):
+    return f'<span style="background-color: yellow;">{text}</span>'
 
 # Function to classify highlighted input for both binary and multi-class
 def classify_highlighted_input(highlighted_input):
@@ -96,6 +92,9 @@ def main():
 
     # Input text box for highlighted input
     highlighted_input = st.text_area("Enter highlighted text:", "<highlight>This is a sample user input.</highlight>")
+
+    # Display the highlighted text
+    st.markdown("Highlighted Text: " + highlight_text(highlighted_input), unsafe_allow_html=True)
 
     # Button to trigger classification
     if st.button("Classify"):
