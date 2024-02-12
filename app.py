@@ -76,7 +76,7 @@ def extract_highlighted_text():
 def classify_highlighted_input(highlighted_input):
     try:
         # Extract the text from highlighted input
-        user_input = extract_highlighted_text(highlighted_input)
+        user_input = extract_highlighted_text()
 
         # Preprocess and classify the user input
         binary_prediction, offending_words = binary_cyberbullying_detection(user_input)
@@ -94,6 +94,7 @@ def classify_highlighted_input(highlighted_input):
         st.error(f"Error in classify_highlighted_input: {e}")
         print(f"Error in classify_highlighted_input: {e}")
         return None
+
 # Streamlit App
 def main():
     st.title("Cyberbullying Detection App")
