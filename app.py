@@ -68,42 +68,64 @@ def multi_class_cyberbullying_detection(text):
         st.error(f"Error in multi_class_cyberbullying_detection: {e}")
         return None
 
-# Function to classify user input
-def classify_user_input(user_input):
-    try:
-        # Preprocess the user input
-        preprocessed_text = preprocess_text(user_input)
+def detect():
+    st.title('Cyberbullying Detection App')
 
-        # Binary Cyberbullying Detection
-        binary_prediction, offending_words = binary_cyberbullying_detection(preprocessed_text)
+    # Input text box
+    user_input = st.text_area("Share your thoughts:", "", key="user_input")
 
-        # Multi-class Cyberbullying Detection
-        multi_class_label, decision_function_values = multi_class_cyberbullying_detection(preprocessed_text)
+    # Make binary prediction and check for offensive words
+    binary_result, offensive_words = binary_cyberbullying_detection(user_input)
 
-        return {
-            'Binary Prediction': binary_prediction,
-            'Offending Words': offending_words,
-            'Multi-class Prediction': multi_class_label,
-            'Decision Function Values': decision_function_values
-        }
-    except Exception as e:
-        st.error(f"Error in classify_user_input: {e}")
-        return None
+    # View flag for detailed predictions
+    view_flagging_reasons = binary_result == 1
+    view_predictions = st.checkbox("View Flagging Reasons", value=view_flagging_reasons)
 
-# Main function to start the Streamlit app
+    # Check if the user has entered any text
+    if user_input:
+        st.markdown("<div class='st-bw'>", unsafe_allow_html=True)
+
+        # Display binary prediction only if "View Flagging Reasons" is checked
+        if view_predictions and binary_result == 1:
+            st.write(f"Binary Cyberbullying Prediction: {'Cyberbullying' if binary_result == 1 else 'Not Cyberbullying'}")
+
+        # Check for offensive words and display warning
+        if offensive_words and (view_predictions or binary_result == 0):
+            # Adjust the warning message based on cyberbullying classification
+            if binary_result == 1:
+                st.warning(f"This tweet contains offensive language. Consider editing. Detected offensive words: {offensive_words}")
+            else:
+                st.warning(f"While this tweet is not necessarily cyberbullying, it may contain offensive language. Consider editing. Detected offensive words: {offensive_words}")
+
+        st.markdown("</div>", unsafe_allow_html=True)
+
+        # Make multi-class prediction
+        multi_class_result = multi_class_cyberbullying_detection(user_input)
+        if multi_class_result is not None:
+            predicted_class, prediction_probs = multi_class_result
+            st.markdown("<div class='st-eb'>", unsafe_allow_html=True)
+
+            if view_predictions:
+                st.write(f"Multi-Class Predicted Class: {predicted_class}")
+
+            st.markdown("</div>", unsafe_allow_html=True)
+
+            # Check if classified as cyberbullying
+            if predicted_class != 'not_cyberbullying':
+                st.error(f"Please edit your tweet before resending. Your text contains content that may appear as bullying to other users' {predicted_class.replace('_', ' ').title()}.")
+            elif offensive_words and not view_predictions:
+                st.warning("While this tweet is not necessarily cyberbullying, it may contain offensive language. Consider editing.")
+            else:
+                # Display message before sending
+                st.success('This tweet is safe to send.')
 def main():
-    st.title("Cyberbullying Detection App")
-    st.image(logo, caption='Logo', use_column_width=True)
+    st.set_page_config(
+        page_title="Cyberbullying Detection App",
+        page_icon=logo,
+        layout="centered"
+    )
 
-    user_input = st.text_area("Enter text for classification:", height=100)
-    if st.button("Classify"):
-        if user_input:
-            classification_result = classify_user_input(user_input)
-            st.subheader("Classification Result:")
-            st.write(f"Binary Prediction: {classification_result['Binary Prediction']}")
-            st.write(f"Offending Words: {classification_result['Offending Words']}")
-            st.write(f"Multi-class Prediction: {classification_result['Multi-class Prediction']}")
-            st.write(f"Decision Function Values: {classification_result['Decision Function Values']}")
+    detect()
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     main()
