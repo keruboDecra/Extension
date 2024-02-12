@@ -1,5 +1,5 @@
 import streamlit as st
-import nltk
+
 from PIL import Image
 import re
 from nltk.corpus import stopwords
@@ -7,9 +7,6 @@ from nltk.stem import WordNetLemmatizer
 import numpy as np
 import joblib
 import streamlit as st
-
-# Download NLTK resources
-nltk.download('stopwords')
 
 # Load the SGD classifier, TF-IDF vectorizer, and label encoder
 sgd_classifier = joblib.load('sgd_classifier_model.joblib')
