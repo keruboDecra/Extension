@@ -1,9 +1,12 @@
 import streamlit as st
+
+from PIL import Image
 import re
 from nltk.corpus import stopwords
 from nltk.stem import WordNetLemmatizer
 import numpy as np
 import joblib
+import streamlit as st
 
 # Load the SGD classifier, TF-IDF vectorizer, and label encoder
 sgd_classifier = joblib.load('sgd_classifier_model.joblib')
@@ -58,58 +61,52 @@ def multi_class_cyberbullying_detection(text):
         st.error(f"Error in multi_class_cyberbullying_detection: {e}")
         return None
 
-# Function to extract text from highlighted input using Streamlit button
-def extract_highlighted_text():
-    st.text_input("Highlight text on the webpage and click the button below")
-    if st.button("Extract Highlighted Text"):
-        highlighted_text = st.session_state.value
-        extracted_text = highlighted_text.replace('<highlight>', '').replace('</highlight>', '')
-        return extracted_text
-    return None
+# Function to extract text from highlighted input
+def extract_highlighted_text(highlighted_text):
+    # Hypothetical function to extract the text from highlighted input
+    # You may need to replace this with your actual implementation
+    # This is just a placeholder, adapt it to your needs
+    extracted_text = highlighted_text.replace('<highlight>', '').replace('</highlight>', '')
+    return extracted_text
 
-def classify_highlighted_input():
+# Function to classify highlighted input for both binary and multi-class
+def classify_highlighted_input(highlighted_input):
     try:
         # Extract the text from highlighted input
-        user_input = extract_highlighted_text()
+        user_input = extract_highlighted_text(highlighted_input)
 
-        if user_input is not None:
-            # Preprocess and classify the user input
-            binary_prediction, offending_words = binary_cyberbullying_detection(user_input)
-            multi_class_label, decision_function_values = multi_class_cyberbullying_detection(user_input)
+        # Preprocess and classify the user input
+        binary_prediction, offending_words = binary_cyberbullying_detection(user_input)
+        multi_class_label, decision_function_values = multi_class_cyberbullying_detection(user_input)
 
-            # Return results
-            return {
-                "user_input": user_input,
-                "binary_prediction": binary_prediction,
-                "offending_words": offending_words,
-                "multi_class_label": multi_class_label,
-                "decision_function_values": decision_function_values
-            }
+        # Return results
+        return {
+            "user_input": user_input,
+            "binary_prediction": binary_prediction,
+            "offending_words": offending_words,
+            "multi_class_label": multi_class_label,
+            "decision_function_values": decision_function_values
+        }
     except Exception as e:
         st.error(f"Error in classify_highlighted_input: {e}")
-        print(f"Error in classify_highlighted_input: {e}")
         return None
 
-# Streamlit App
 def main():
     st.title("Cyberbullying Detection App")
 
-    # Classify button
+    # Input text box for highlighted input
+    highlighted_input = st.text_area("Enter highlighted text:", "<highlight>This is a sample user input.</highlight>")
+
+    # Button to trigger classification
     if st.button("Classify"):
-        # Classify highlighted input
-        classification_results = classify_highlighted_input()
+        classification_results = classify_highlighted_input(highlighted_input)
 
-        if classification_results is not None:
-            # Display results
-            st.subheader("Results:")
-            st.write("User Input:", classification_results["user_input"])
-            st.write("Binary Prediction:", classification_results["binary_prediction"])
-            st.write("Offending Words:", classification_results["offending_words"])
-            st.write("Multi-class Label:", classification_results["multi_class_label"])
-            st.write("Decision Function Values:", classification_results["decision_function_values"])
-        else:
-            st.error("Error in classification. Please try again.")
+        # Display results
+        st.write("User Input:", classification_results["user_input"])
+        st.write("Binary Prediction:", classification_results["binary_prediction"])
+        st.write("Offending Words:", classification_results["offending_words"])
+        st.write("Multi-class Label:", classification_results["multi_class_label"])
+        st.write("Decision Function Values:", classification_results["decision_function_values"])
 
-# Run the Streamlit app
 if __name__ == "__main__":
     main()
