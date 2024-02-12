@@ -1,5 +1,3 @@
-import streamlit as st
-
 from PIL import Image
 import re
 from nltk.corpus import stopwords
@@ -11,6 +9,15 @@ import streamlit as st
 # Load the SGD classifier, TF-IDF vectorizer, and label encoder
 sgd_classifier = joblib.load('sgd_classifier_model.joblib')
 label_encoder = joblib.load('label_encoder.joblib')
+
+# Load the logo image
+logo = Image.open('logo.png')
+
+# Global variables
+session_state = {
+    'user_input': '',
+    'chrome_extension_message': None
+}
 
 # Function to clean and preprocess text
 def preprocess_text(text):
@@ -28,7 +35,7 @@ def binary_cyberbullying_detection(text):
         preprocessed_text = preprocess_text(text)
 
         # Make prediction using the loaded pipeline
-        prediction = sgd_classifier.predict([preprocessed_text])
+        prediction = model_pipeline.predict([preprocessed_text])
 
         # Check for offensive words
         with open('en.txt', 'r') as f:
@@ -61,71 +68,42 @@ def multi_class_cyberbullying_detection(text):
         st.error(f"Error in multi_class_cyberbullying_detection: {e}")
         return None
 
-# Function to create highlighted text
-def highlight_text(text):
-    return f'<span style="background-color: yellow;">{text}</span>'
-# Function to extract text from highlighted input
-def extract_highlighted_text(highlighted_text):
+# Function to classify user input
+def classify_user_input(user_input):
     try:
-        # Hypothetical function to extract the text from highlighted input
-        # You may need to replace this with your actual implementation
-        # This is just a placeholder, adapt it to your needs
-        start_tag = "<highlight>"
-        end_tag = "</highlight>"
-        start_index = highlighted_text.find(start_tag)
-        end_index = highlighted_text.find(end_tag)
+        # Preprocess the user input
+        preprocessed_text = preprocess_text(user_input)
 
-        if start_index != -1 and end_index != -1:
-            extracted_text = highlighted_text[start_index + len(start_tag):end_index]
-            return extracted_text
-        else:
-            st.warning("No highlighted text found.")
-            return None
-    except Exception as e:
-        st.error(f"Error in extract_highlighted_text: {e}")
-        return None
+        # Binary Cyberbullying Detection
+        binary_prediction, offending_words = binary_cyberbullying_detection(preprocessed_text)
 
-# Function to classify highlighted input for both binary and multi-class
-def classify_highlighted_input(highlighted_input):
-    try:
-        # Extract the text from highlighted input
-        user_input = extract_highlighted_text(highlighted_input)
+        # Multi-class Cyberbullying Detection
+        multi_class_label, decision_function_values = multi_class_cyberbullying_detection(preprocessed_text)
 
-        # Preprocess and classify the user input
-        binary_prediction, offending_words = binary_cyberbullying_detection(user_input)
-        multi_class_label, decision_function_values = multi_class_cyberbullying_detection(user_input)
-
-        # Return results
         return {
-            "user_input": user_input,
-            "binary_prediction": binary_prediction,
-            "offending_words": offending_words,
-            "multi_class_label": multi_class_label,
-            "decision_function_values": decision_function_values
+            'Binary Prediction': binary_prediction,
+            'Offending Words': offending_words,
+            'Multi-class Prediction': multi_class_label,
+            'Decision Function Values': decision_function_values
         }
     except Exception as e:
-        st.error(f"Error in classify_highlighted_input: {e}")
+        st.error(f"Error in classify_user_input: {e}")
         return None
 
+# Main function to start the Streamlit app
 def main():
     st.title("Cyberbullying Detection App")
+    st.image(logo, caption='Logo', use_column_width=True)
 
-    # Input text box for highlighted input
-    highlighted_input = st.text_area("Enter highlighted text:", "<highlight>This is a sample user input.</highlight>")
-
-    # Display the highlighted text
-    st.markdown("Highlighted Text: " + highlight_text(highlighted_input), unsafe_allow_html=True)
-
-    # Button to trigger classification
+    user_input = st.text_area("Enter text for classification:", height=100)
     if st.button("Classify"):
-        classification_results = classify_highlighted_input(highlighted_input)
+        if user_input:
+            classification_result = classify_user_input(user_input)
+            st.subheader("Classification Result:")
+            st.write(f"Binary Prediction: {classification_result['Binary Prediction']}")
+            st.write(f"Offending Words: {classification_result['Offending Words']}")
+            st.write(f"Multi-class Prediction: {classification_result['Multi-class Prediction']}")
+            st.write(f"Decision Function Values: {classification_result['Decision Function Values']}")
 
-        # Display results
-        st.write("User Input:", classification_results["user_input"])
-        st.write("Binary Prediction:", classification_results["binary_prediction"])
-        st.write("Offending Words:", classification_results["offending_words"])
-        st.write("Multi-class Label:", classification_results["multi_class_label"])
-        st.write("Decision Function Values:", classification_results["decision_function_values"])
-
-if __name__ == "__main__":
+if __name__ == '__main__':
     main()
