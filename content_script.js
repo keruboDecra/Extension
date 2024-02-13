@@ -1,5 +1,8 @@
-// Capture highlighted text
-document.addEventListener('mouseup', function(event) {
+document.addEventListener('mouseup', function () {
   var selectedText = window.getSelection().toString();
-  chrome.runtime.sendMessage({type: "highlightedText", text: selectedText});
+  if (selectedText !== '') {
+    // Highlight the selected text visually (optional)
+    // Send the selected text to the background script for analysis
+    chrome.runtime.sendMessage({ action: 'analyze-highlighted-text' });
+  }
 });
