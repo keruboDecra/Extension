@@ -1,23 +1,25 @@
 {
   "manifest_version": 3,
-  "name": "Highlight and Analyze",
+  "name": "Cyberbullying Detector",
   "version": "1.0",
+  "description": "Detect cyberbullying in highlighted text",
   "permissions": ["activeTab"],
-  "background": {
-    "service_worker": "background.js"
-  },
   "action": {
-    "default_popup": "popup.html",
     "default_icon": {
-      "16": "icon16.png",
-      "48": "icon48.png",
-      "128": "icon128.png"
-    }
+      "16": "logo.png",
+    },
+    "default_title": "Cyberbullying Detector",
+    "default_popup": "popup.html"
   },
-  "content_scripts": [
-    {
-      "matches": ["<all_urls>"],
-      "js": ["content_script.js"]
+  "icons": {
+    "16": "logo.png",
+  },
+  "commands": {
+    "analyze-highlighted-text": {
+      "suggested_key": {
+        "default": "Ctrl+Shift+A"
+      },
+      "description": "Analyze Highlighted Text"
     }
-  ]
+  }
 }
