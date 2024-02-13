@@ -6,13 +6,13 @@
   "permissions": ["activeTab"],
   "action": {
     "default_icon": {
-      "16": "logo.png",
+      "16": "logo.png"
     },
     "default_title": "Cyberbullying Detector",
     "default_popup": "popup.html"
   },
   "icons": {
-    "16": "logo.png",
+    "16": "logo.png"
   },
   "commands": {
     "analyze-highlighted-text": {
