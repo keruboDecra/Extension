@@ -98,9 +98,9 @@ def detect():
         if offensive_words and (view_predictions or binary_result == 0):
             # Adjust the warning message based on cyberbullying classification
             if binary_result == 1:
-                st.warning(f"This tweet contains offensive language. Consider editing. Detected offensive words: {offensive_words}")
+                st.warning(f"This text contains offensive language. Consider editing. Detected offensive words: {offensive_words}")
             else:
-                st.warning(f"While this tweet is not necessarily cyberbullying, it may contain offensive language. Consider editing. Detected offensive words: {offensive_words}")
+                st.warning(f"While this text is not necessarily cyberbullying, it may contain offensive language. Consider editing. Detected offensive words: {offensive_words}")
 
         st.markdown("</div>", unsafe_allow_html=True)
 
@@ -117,12 +117,12 @@ def detect():
 
             # Check if classified as cyberbullying
             if predicted_class != 'not_cyberbullying':
-                st.error(f"Please edit your tweet before resending. Your text contains content that may appear as bullying to other users' {predicted_class.replace('_', ' ').title()}.")
+                st.error(f"Please edit your text before resending. Your text contains content that may appear as bullying to other users' {predicted_class.replace('_', ' ').title()}.")
             elif offensive_words and not view_predictions:
-                st.warning("While this tweet is not necessarily cyberbullying, it may contain offensive language. Consider editing.")
+                st.warning("While this text is not necessarily cyberbullying, it may contain offensive language. Consider editing.")
             else:
                 # Display message before sending
-                st.success('This tweet is safe to send.')
+                st.success('This text is safe to send.')
 def main():
     st.set_page_config(
         page_title="Cyberbullying Detection App",
