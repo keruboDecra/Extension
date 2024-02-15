@@ -28,6 +28,7 @@
       }
 
       #analyzeButton {
+        display: none;
         padding: 10px 20px;
         font-size: 16px;
         cursor: pointer;
@@ -46,9 +47,35 @@
   <body>
     <div id="container">
       <h1>Text Analyzer</h1>
-      <p>Highlight text and click the button to analyze.</p>
-      <button id="analyzeButton">Analyze Highlighted Text</button>
+      <p id="instruction">Highlight text and click the button to analyze.</p>
+      <button id="analyzeButton" onclick="analyzeText()">Analyze Highlighted Text</button>
     </div>
     <script src="popup.js"></script>
+    <script>
+      function analyzeText() {
+        // Retrieve highlighted text or selected text
+        var selectedText = window.getSelection().toString().trim();
+
+        if (selectedText !== '') {
+          // Perform your analysis or show the result here
+          console.log('Analyzing text:', selectedText);
+        } else {
+          // If no text is selected, provide a message or take other actions
+          document.getElementById('instruction').innerText = 'Please highlight text before clicking the button.';
+        }
+      }
+
+      // Check for highlighted text on document load
+      document.addEventListener('DOMContentLoaded', function() {
+        var analyzeButton = document.getElementById('analyzeButton');
+        var instruction = document.getElementById('instruction');
+
+        document.addEventListener('selectionchange', function() {
+          var selectedText = window.getSelection().toString().trim();
+          analyzeButton.style.display = selectedText !== '' ? 'inline-block' : 'none';
+          instruction.innerText = selectedText !== '' ? 'Click the button to analyze.' : 'Highlight text to analyze.';
+        });
+      });
+    </script>
   </body>
 </html>
