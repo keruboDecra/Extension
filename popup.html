@@ -1,15 +1,54 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
   <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Text Analyzer</title>
     <style>
       body {
-        width: 200px;
-        height: 100px;
+        font-family: 'Arial', sans-serif;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+        margin: 0;
+        background-color: #purple; /* Set your background color */
+      }
+
+      #container {
+        text-align: center;
+        opacity: 0;
+        animation: fadeIn 1s ease-out forwards;
+      }
+
+      @keyframes fadeIn {
+        to {
+          opacity: 1;
+        }
+      }
+
+      #analyzeButton {
+        padding: 10px 20px;
+        font-size: 16px;
+        cursor: pointer;
+        background-color: #4B0082; /* Dark Purple */
+        color: white;
+        border: none;
+        border-radius: 5px;
+        transition: background-color 0.3s;
+      }
+
+      #analyzeButton:hover {
+        background-color: #8A2BE2; /* Blue Violet */
       }
     </style>
   </head>
   <body>
-    <button id="analyzeButton">Analyze Highlighted Text</button>
+    <div id="container">
+      <h1>Text Analyzer</h1>
+      <p>Highlight text and click the button to analyze.</p>
+      <button id="analyzeButton">Analyze Highlighted Text</button>
+    </div>
     <script src="popup.js"></script>
   </body>
 </html>
